@@ -3,5 +3,6 @@
 
 فایل یا فولدر رو میگیری میندازی توی صفحه و تمام
 
-برای استفاده نیاز به dotnet 8د ارید
-https://dotnet.microsoft.com/download/dotnet-framework/net48
+برای استفاده نیاز به دات نت ۸ د ارید
+
+https://dotnet.microsoft.com/download/dotnet-framework/net48 👈
