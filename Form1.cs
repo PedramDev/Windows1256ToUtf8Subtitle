@@ -22,7 +22,7 @@ namespace PersianCoder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            numericUpDown1.Enabled = false;
         }
         public void FileToFa(string path)
         {
@@ -39,14 +39,42 @@ namespace PersianCoder
             }
         }
 
+        private List<string> DirsInDepth(List<string> dirs, int? maxDepth)
+        {
+            var allDirs = new List<string>();
+
+            if (maxDepth <= 0 || maxDepth == null)
+            {
+                foreach (var dir in dirs)
+                {
+                    var currentRoot = Directory.GetDirectories(dir).ToList();
+                    var inDepth = DirsInDepth(currentRoot, --maxDepth);
+
+                    allDirs.AddRange(inDepth);
+                    allDirs.AddRange(currentRoot);
+                }
+            }
+
+            return allDirs;
+        }
+
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
+            int? maxDeth = null;
+            if (checkBox1.Checked)
+            {
+                maxDeth = (int)numericUpDown1.Value;
+            }
+
             var filepaths = new List<string>();
             foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false))
             {
                 if (Directory.Exists(s))
                 {
-                    filepaths.AddRange(Directory.GetFiles(s));
+                    foreach (var item in DirsInDepth(new List<string>() { s }, maxDeth))
+                    {
+                        filepaths.AddRange(Directory.GetFiles(item));
+                    }
                 }
                 else
                 {
@@ -83,6 +111,11 @@ namespace PersianCoder
         private void Form1_DragLeave(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDown1.Enabled = checkBox1.Checked;
         }
     }
 }
